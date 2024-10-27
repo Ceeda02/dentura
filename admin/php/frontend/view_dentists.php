@@ -126,6 +126,11 @@ $conn->close();
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="view_contacts.php">
+                            <i class="fas fa-envelope"></i> View Contacts
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link " href="../view_bookings.php">
                             <i class="fas fa-calendar-check"></i> View Bookings
                         </a>

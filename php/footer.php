@@ -7,7 +7,7 @@
             <!--Grid column-->
             <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
                 <h5 class="text-uppercase mb-4">About company</h5>
-                <p>
+                <p class="text-white">
                     Dentura is your premier dental clinic in Pangasinan, dedicated to providing exceptional dental care and services. Our experienced team is committed to ensuring your oral health and creating beautiful smiles. From routine check-ups to advanced treatments, we strive to offer personalized care in a welcoming environment. Your comfort and satisfaction are our top priorities!
                 </p>
                 <div class="mt-4">

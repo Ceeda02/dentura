@@ -123,10 +123,16 @@ $conn->close();
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="view_contacts.php">
+                            <i class="fas fa-envelope"></i> View Contacts
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="../view_bookings.php">
                             <i class="fas fa-calendar-check"></i> View Bookings
                         </a>
                     </li>
+                    
                 </ul>
             </div>
         </nav>
@@ -154,7 +160,8 @@ $conn->close();
                                 <tr>
                                     <td><?php echo $index + 1; ?></td>
                                     <td><?php echo htmlspecialchars($service['service_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($service['description']); ?></td>
+                                    <td><?php echo htmlspecialchars(substr($service['description'], 0, 50)) . (strlen($service['description']) > 50 ? '...' : ''); ?></td>
+
                                     <td>
                                         <a href='../edit_service.php?service_name=<?php echo urlencode($service['service_name']); ?>' class='text-warning mr-3'>
                                             <i class='fas fa-edit'></i>

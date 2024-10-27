@@ -18,6 +18,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Fetch the current user's information if logged in
+$logged_in_user = null;
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $userQuery = $conn->prepare("SELECT first_name, last_name, email FROM users WHERE id = ?");
+    $userQuery->bind_param("i", $user_id);
+    $userQuery->execute();
+    $userQuery->bind_result($first_name, $last_name, $email);
+    $userQuery->fetch();
+    $logged_in_user = ['name' => $first_name . ' ' . $last_name, 'email' => $email];
+    $userQuery->close();
+}
+
 // Fetch service names for the reason dropdown
 $reasons = [];
 $reasonQuery = "SELECT service_name FROM services";
@@ -86,7 +99,9 @@ $conn->close();
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                value="<?php echo htmlspecialchars($logged_in_user['name'] ?? ''); ?>" 
+                                placeholder="Enter your name" required readonly>
                         </div>
                     </div>
                     <div class="form-group">
@@ -94,7 +109,9 @@ $conn->close();
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                             </div>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                value="<?php echo htmlspecialchars($logged_in_user['email'] ?? ''); ?>" 
+                                placeholder="Enter your email" required readonly>
                         </div>
                     </div>
                     <div class="form-group">

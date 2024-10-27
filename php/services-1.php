@@ -53,7 +53,6 @@ session_start();
                     <?php foreach ($services as $index => $service): ?>
                         <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
                             <img src="<?php echo htmlspecialchars($service['image']); ?>" class="d-block w-100" alt="<?php echo htmlspecialchars($service['service_name']); ?>" style="max-height: 500px; object-fit: cover;">
-                            
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -71,7 +70,7 @@ session_start();
             <div class="card mt-4 mx-auto" style="max-width: 700px;">
                 <div class="description-box" id="serviceDescription">
                     <h5 class="service-name"><?php echo htmlspecialchars($services[0]['service_name']); ?></h5>
-                    <?php echo htmlspecialchars($services[0]['description']); // Display the first description initially ?>
+                    <p class="service-description"><?php echo htmlspecialchars($services[0]['description']); ?></p>
                 </div>
             </div>
         <?php else: ?>
@@ -95,7 +94,6 @@ session_start();
         serviceName.innerText = names[event.to];
         serviceDescription.innerText = descriptions[event.to];
     });
-</script>
-
+    </script>
 </body>
 </html>

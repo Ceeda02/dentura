@@ -71,7 +71,7 @@
         </div> 
     </nav>
 
-     <!-- Login Modal -->
+ <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -100,6 +100,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Signup Modal -->
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">

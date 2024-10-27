@@ -16,17 +16,26 @@ if ($conn->connect_error) {
 }
 
 // Check if form data is set and the user is logged in
-if (isset($_SESSION['user_id'], $_POST['name'], $_POST['email'], $_POST['number'], $_POST['reason'], $_POST['branch'], $_POST['date'], $_POST['time'])) {
+if (isset($_SESSION['user_id'], $_POST['number'], $_POST['reason'], $_POST['branch'], $_POST['date'], $_POST['time'])) {
     // Get the user ID from the session
     $user_id = $_SESSION['user_id'];
 
-    // Prepare and bind the statement
+    // Retrieve first name, last name, and email for the user
+    $userQuery = $conn->prepare("SELECT first_name, last_name, email FROM users WHERE id = ?");
+    $userQuery->bind_param("i", $user_id);
+    $userQuery->execute();
+    $userQuery->bind_result($first_name, $last_name, $email);
+    $userQuery->fetch();
+    $userQuery->close();
+
+    // Combine first and last name
+    $name = $first_name . ' ' . $last_name;
+
+    // Prepare and bind the statement for booking insertion
     $stmt = $conn->prepare("INSERT INTO bookings (uid, name, email, number, reason, branch, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("isssssss", $user_id, $name, $email, $number, $reason, $branch, $date, $time);
 
-    // Get form data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    // Get remaining form data
     $number = $_POST['number'];
     $reason = $_POST['reason'];
     $branch = $_POST['branch'];
@@ -35,23 +44,8 @@ if (isset($_SESSION['user_id'], $_POST['name'], $_POST['email'], $_POST['number'
 
     // Execute the statement
     if ($stmt->execute()) {
-        // Send confirmation email using mail()
-        $to = $email; // User email
-        $subject = 'Booking Confirmation';
-        $body = nl2br("Dear $name,<br><br>Thank you for booking with us!<br><br>Your booking details are as follows:<br>Name: $name<br>Email: $email<br>Number: $number<br>Reason: $reason<br>Branch: $branch<br>Date: $date<br>Time: $time<br><br>We look forward to seeing you!<br><br>Best Regards,<br>Dentura Team");
-        $headers = "From: noreply@dentura.com\r\n"; // Sender email
-        $headers .= "Reply-To: noreply@dentura.com\r\n";
-        $headers .= "Content-type: text/html\r\n"; // Set HTML email format
-
-        // Send the email
-        if (mail($to, $subject, $body, $headers)) {
-            $_SESSION['booking_success'] = true; // Set session variable for success
-        } else {
-            $_SESSION['booking_success'] = false; // Email sending failed
-            $_SESSION['email_error'] = "Email sending failed."; // Store the error message
-        }
-        
-        header("Location: booking_form.php"); // Redirect to the booking form
+        $_SESSION['booking_success'] = "Booking successfully made!";
+        header("Location: booking_form.php"); // Redirect to the booking form with success message
         exit();
     } else {
         echo "Error: " . $stmt->error; // Database insertion error
