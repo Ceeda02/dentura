@@ -16,8 +16,8 @@ if ($conn->connect_error) {
 // Define target directory for dentist photos
 $target_dir = "../admin/php/uploads/";
 
-// Fetch dentists from the database
-$sql = "SELECT name, photo FROM dentists";
+// Fetch dentists from the database, including position and social links
+$sql = "SELECT name, photo, position, fb_link, ig_link FROM dentists";
 $result = $conn->query($sql);
 ?>
 
@@ -44,7 +44,10 @@ $result = $conn->query($sql);
                     // Loop through each dentist and generate a box
                     while ($row = $result->fetch_assoc()) {
                         $name = htmlspecialchars($row['name']);
+                        $position = htmlspecialchars($row['position']);
                         $photo = htmlspecialchars($row['photo']);
+                        $fb_link = htmlspecialchars($row['fb_link'] ?? '#');
+                        $ig_link = htmlspecialchars($row['ig_link'] ?? '#');
                         $profile_image = $target_dir . basename($photo);
 
                         echo "
@@ -52,10 +55,10 @@ $result = $conn->query($sql);
                             <div class='box'>
                                 <img class='rounded-circle' src='$profile_image' alt='$name' style='width:150px; height:150px;'>
                                 <h3 class='name'>$name</h3>
+                                <p class='title'>$position</p>
                                 <div class='social'>
-                                    <a href='https://www.facebook.com/'><i class='fa fa-facebook-official'></i></a>
-                                    <a href='https://x.com/?lang=en'><i class='fa fa-twitter'></i></a>
-                                    <a href='https://www.instagram.com/'><i class='fa fa-instagram'></i></a>
+                                    <a href='$fb_link' target='_blank'><i class='fa fa-facebook-official'></i></a>
+                                    <a href='$ig_link' target='_blank'><i class='fa fa-instagram'></i></a>
                                 </div>
                             </div>
                         </div>";

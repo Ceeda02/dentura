@@ -164,69 +164,60 @@ $conn->close();
         <i class="fas fa-plus"></i>
     </button>
     <table class="table mt-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($dentists)) : ?>
-                <?php foreach ($dentists as $dentist) : ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($dentist['id']); ?></td>
-                        <td><?php echo htmlspecialchars($dentist['name']); ?></td>
-                        <td>
-                            <button class="btn text-warning mr-3" onclick="editDentist(<?php echo $dentist['id']; ?>, '<?php echo htmlspecialchars($dentist['name']); ?>')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn text-danger" onclick="deleteDentist(<?php echo $dentist['id']; ?>)">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else : ?>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Facebook Link</th> <!-- New Facebook Column -->
+            <th>Instagram Link</th> <!-- New Instagram Column -->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($dentists)) : ?>
+            <?php foreach ($dentists as $dentist) : ?>
                 <tr>
-                    <td colspan="4" class="text-center">No dentists available.</td>
+                    <td><?php echo htmlspecialchars($dentist['id']); ?></td>
+                    <td><?php echo htmlspecialchars($dentist['name']); ?></td>
+                    <td><?php echo htmlspecialchars($dentist['position']); ?></td>
+                    <td>
+                        <?php if (!empty($dentist['fb_link'])): ?>
+                            <a href="<?php echo htmlspecialchars($dentist['fb_link']); ?>" target="_blank">Facebook Profile</a>
+                        <?php else: ?>
+                            N/A
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (!empty($dentist['ig_link'])): ?>
+                            <a href="<?php echo htmlspecialchars($dentist['ig_link']); ?>" target="_blank">Instagram Profile</a>
+                        <?php else: ?>
+                            N/A
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <button class="btn text-warning mr-3" onclick="editDentist(<?php echo $dentist['id']; ?>, '<?php echo htmlspecialchars($dentist['name']); ?>', '<?php echo htmlspecialchars($dentist['position']); ?>', '<?php echo htmlspecialchars($dentist['fb_link'] ?? ''); ?>', '<?php echo htmlspecialchars($dentist['ig_link'] ?? ''); ?>')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn text-danger" onclick="deleteDentist(<?php echo $dentist['id']; ?>)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <tr>
+                <td colspan="6" class="text-center">No dentists available.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+
+
 </div>
 
 
-
-<!-- Modal for Adding Dentist -->
-<div class="modal fade" id="addDentistModal" tabindex="-1" role="dialog" aria-labelledby="addDentistModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addDentistModalLabel">Add Dentist</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="../manage-dentists.php" method="POST" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="dentistName">Name</label>
-                        <input type="text" class="form-control" id="dentistName" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dentistPhoto">Photo</label>
-                        <input type="file" class="form-control" id="dentistPhoto" name="photo" accept="image/*" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="action" value="add">Add Dentist</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 
 
@@ -253,8 +244,27 @@ $conn->close();
                         <input type="text" class="form-control" id="dentistName" name="name" required>
                     </div>
                     <div class="form-group">
+                        <label for="dentistPosition">Position</label>
+                        <select class="form-control" id="dentistPosition" name="position" required>
+                            <option value="General Dentist">General Dentist</option>
+                            <option value="Dental Hygienist">Dental Hygienist</option>
+                            <option value="Orthodontist">Orthodontist</option>
+                            <option value="Endodontist">Endodontist</option>
+                            <option value="Pediatric Dentist">Pediatric Dentist</option>
+                            <option value="Oral Surgeon">Oral Surgeon</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="dentistPhoto">Photo</label>
                         <input type="file" class="form-control" id="dentistPhoto" name="photo" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fbLink">Facebook Link</label>
+                        <input type="url" class="form-control" id="fbLink" name="fb_link" placeholder="https://facebook.com/yourprofile">
+                    </div>
+                    <div class="form-group">
+                        <label for="igLink">Instagram Link</label>
+                        <input type="url" class="form-control" id="igLink" name="ig_link" placeholder="https://instagram.com/yourprofile">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -265,6 +275,9 @@ $conn->close();
         </div>
     </div>
 </div>
+
+
+
 
 <!-- Modal for Editing Dentist -->
 <div class="modal fade" id="editDentistModal" tabindex="-1" role="dialog" aria-labelledby="editDentistModalLabel" aria-hidden="true">
@@ -287,10 +300,35 @@ $conn->close();
                         <input type="text" class="form-control" id="editDentistName" name="name" required>
                     </div>
                     
+                    <!-- Dentist Position -->
+                    <div class="form-group">
+                        <label for="editDentistPosition">Position</label>
+                        <select class="form-control" id="editDentistPosition" name="position" required>
+                            <option value="General Dentist">General Dentist</option>
+                            <option value="Dental Hygienist">Dental Hygienist</option>
+                            <option value="Orthodontist">Orthodontist</option>
+                            <option value="Endodontist">Endodontist</option>
+                            <option value="Pediatric Dentist">Pediatric Dentist</option>
+                            <option value="Oral Surgeon">Oral Surgeon</option>
+                        </select>
+                    </div>
+                    
                     <!-- Dentist Photo -->
                     <div class="form-group">
                         <label for="editDentistPhoto">Photo</label>
                         <input type="file" class="form-control" id="editDentistPhoto" name="photo" accept="image/*">
+                    </div>
+                    
+                    <!-- Facebook Link -->
+                    <div class="form-group">
+                        <label for="editFbLink">Facebook Link</label>
+                        <input type="url" class="form-control" id="editFbLink" name="fb_link" placeholder="https://facebook.com/yourprofile">
+                    </div>
+                    
+                    <!-- Instagram Link -->
+                    <div class="form-group">
+                        <label for="editIgLink">Instagram Link</label>
+                        <input type="url" class="form-control" id="editIgLink" name="ig_link" placeholder="https://instagram.com/yourprofile">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -301,6 +339,7 @@ $conn->close();
         </div>
     </div>
 </div>
+
 
 
 
@@ -353,12 +392,15 @@ $conn->close();
 
 <!-- JavaScript Functions for Edit and Delete -->
 <script>
-    function editDentist(id, name) {
-        // Populate the modal with the current dentist information
-        document.getElementById('editDentistId').value = id;
-        document.getElementById('editDentistName').value = name;
-        $('#editDentistModal').modal('show');
-    }
+    function editDentist(id, name, position, fbLink = '', igLink = '') {
+    document.getElementById('editDentistId').value = id;
+    document.getElementById('editDentistName').value = name;
+    document.getElementById('editDentistPosition').value = position;
+    document.getElementById('editFbLink').value = fbLink;
+    document.getElementById('editIgLink').value = igLink;
+    $('#editDentistModal').modal('show');
+}
+
 
     function deleteDentist(id) {
         if (confirm('Are you sure you want to delete this dentist?')) {
