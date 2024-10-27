@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +12,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/navigationbar.css"> <!-- Link to your external CSS file -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="/css/navigationbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Start Session -->
-    
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg custom-navbar sticky-top"> <!-- Use custom class -->
+    <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand" href="homepage.php">
                 <img src="/assets/images/DENTURA.png" alt="DENTURA" style="width: 100px; height: auto;">
@@ -33,57 +32,39 @@
                     </li>
                     <li class="nav-item category">
                       <a class="nav-link" aria-current="page" href="aboutus.php">About Us</a>
-                   </li>
-                    <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Services
-            </a>
-            <li class="nav-item category">
-                <a class="nav-link" aria-current="page" href="contactus.php">Contact Us</a>
-            </li>
-            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                <?php
-                // Fetch services from the database
-                $servername = "localhost"; 
-                $username = "root"; 
-                $password = ""; 
-                $dbname = "dentura"; 
-
-                $conn = new mysqli($servername, $username, $password, $dbname);
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                $services = [];
-                $sql = "SELECT service_name FROM services";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $services[] = $row['service_name'];
-                    }
-                }
-
-                $conn->close();
-
-                if (empty($services)): ?>
-                    <li><a class="dropdown-item" href="#">No services available</a></li>
-                <?php else:
-                    foreach ($services as $service): ?>
-                        <li><a class="dropdown-item" href="#"><?php echo htmlspecialchars($service); ?></a></li>
-                    <?php endforeach; 
-                endif; ?>
-            </ul>
-        </li>
-
+                    </li>
+                    <li class="nav-item category">
+                      <a class="nav-link" aria-current="page" href="services-1.php">Services</a>
+                    </li>
                     
-                    <!-- <li class="nav-item">
-                        <a href="contactus.php" class="btn btn-appointment btn-lg custom-btn" 
-                        style="background-color: #0085BE; color: white; border: 2px solid #0085BE; text-align: center; text-decoration: none; padding: 5px 10px; transition: background-color 0.3s ease, color 0.3s ease;">
-                            Contact Us
-                        </a>
-                    </li> -->
+                    <li class="nav-item category">
+                        <a class="nav-link" aria-current="page" href="contactus.php">Contact Us</a>
+                    </li>
                 </ul>
+                
+                <!-- Right-aligned user options -->
+                <!-- Right-aligned user options -->
+<ul class="navbar-nav">
+    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+        <li class="nav-item">
+            <i class="fas fa-bell" data-toggle="modal" data-target="#notificationsModal"></i>
+        </li>
+        <li class="nav-item">
+            <span class="nav-link">Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?></span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="logout.php">Logout</a>
+        </li>
+    <?php else: ?>
+        <li class="nav-item">
+            <a class="nav-link coloraccount" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link coloraccount" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</a>
+        </li>        
+    <?php endif; ?>
+</ul>
+
             </div>
         </div> 
     </nav>

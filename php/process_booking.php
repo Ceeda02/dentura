@@ -15,11 +15,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if form data is set
-if (isset($_POST['name'], $_POST['email'], $_POST['number'], $_POST['reason'], $_POST['branch'], $_POST['date'], $_POST['time'])) {
+// Check if form data is set and the user is logged in
+if (isset($_SESSION['user_id'], $_POST['name'], $_POST['email'], $_POST['number'], $_POST['reason'], $_POST['branch'], $_POST['date'], $_POST['time'])) {
+    // Get the user ID from the session
+    $user_id = $_SESSION['user_id'];
+
     // Prepare and bind the statement
-    $stmt = $conn->prepare("INSERT INTO bookings (name, email, number, reason, branch, date, time) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssss", $name, $email, $number, $reason, $branch, $date, $time);
+    $stmt = $conn->prepare("INSERT INTO bookings (uid, name, email, number, reason, branch, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssssss", $user_id, $name, $email, $number, $reason, $branch, $date, $time);
 
     // Get form data
     $name = $_POST['name'];
@@ -56,7 +59,7 @@ if (isset($_POST['name'], $_POST['email'], $_POST['number'], $_POST['reason'], $
 
     $stmt->close();
 } else {
-    echo "Error: Missing form data.";
+    echo "Error: Missing form data or user not logged in.";
 }
 
 $conn->close();

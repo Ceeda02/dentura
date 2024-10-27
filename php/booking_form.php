@@ -56,14 +56,20 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dentura</title>
+    <title>Denture Ni Ano</title>
     <link rel="icon" href="/assets/images/dlogo.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/book.css"> <!-- Link to external CSS file -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Font Awesome for icons -->
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <?php include 'navigationbar.php'; ?>
+    <?php include 'notif_modal.php'; ?>
 
     <div class="container-fluid d-flex align-items-center justify-content-center vh-100">
         <div class="row w-75">
@@ -120,21 +126,21 @@ $conn->close();
                         </select>
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                            </div>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                            </div>
-                            <input type="time" class="form-control" id="time" name="time" required>
-                        </div>
-                    </div>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+        </div>
+        <input type="date" class="form-control" id="date" name="date" required>
+    </div>
+</div>
+<div class="form-group">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+        </div>
+        <input type="time" class="form-control" id="time" name="time" required min="07:30" max="16:00">
+    </div>
+</div>
                     <button type="submit" class="btn btn-submit btn-block" style="background-color: #0085BE; color: #ffffff;">Book Now</button>
                 </form>
             </div>
@@ -144,7 +150,13 @@ $conn->close();
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    // Set the minimum date to today for the date input
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
 
+    // Optional: Set the default time to 7:30 AM
+    document.getElementById('time').value = '07:30';
+</script>
     <?php if ($booking_success): ?>
         <script>
             alert("Your booking was successful! Thank you for choosing Dentura.");

@@ -15,11 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare the email
-    $to = 'prog.sherwin@gmail.com'; // Admin email address
+    $to = 'cahdou23k@gmail.com'; // Admin email address
     $subject = 'Dentura User Message';
     $body = nl2br("Full Name: $fullName<br>Email: $email<br><br>Message:<br>$message");
-    $headers = "From: $email\r\n";
-    $headers .= "Reply-To: $email\r\n";
+
+    // Set headers
+    $headers = "From: chaaazoobie76@gmail.com\r\n"; // Use a no-reply address
+    $headers .= "Reply-To: $email\r\n"; // Set the user's email as the reply-to
     $headers .= "Content-type: text/html\r\n"; // Set HTML email format
 
     // Send the email
@@ -36,3 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: contactus.php"); // Redirect back to contactus.php
     exit();
 }
+
+
+// prog.sherwin@gmail.com

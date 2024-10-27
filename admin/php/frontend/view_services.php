@@ -7,19 +7,33 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Determine the active section
-$activeSection = 'users'; // Default active section
+// Database configuration for booking notifications and services
+$conn = new mysqli("localhost", "root", "", "dentura");
 
-// Check the active section from URL parameters
-if (isset($_GET['section'])) {
-    $activeSection = $_GET['section'];
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
+// Count new (pending) bookings for notifications
+$result = $conn->query("SELECT COUNT(*) as newBookings FROM bookings WHERE status = 'Pending'");
+$newBookings = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $newBookings = $row['newBookings'];
+}
+
+// Fetch all services from the database for display and carousel
+$sql = "SELECT service_name, image, description FROM services";
+$result = $conn->query($sql);
+
+$services = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $services[] = $row;
+    }
+}
+$conn->close();
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,25 +55,6 @@ if (isset($_GET['section'])) {
     </style>
 </head>
 <body>
-
-<?php
-// Database configuration for booking notifications
-$conn = new mysqli("localhost", "root", "", "dentura");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Count new (pending) bookings
-$result = $conn->query("SELECT COUNT(*) as newBookings FROM bookings WHERE status = 'Pending'");
-$newBookings = 0;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $newBookings = $row['newBookings'];
-}
-$conn->close();
-?>
-
 
 <!-- Top Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -96,63 +91,51 @@ $conn->close();
 
 
 
+
+<!-- Navbar and Sidebar code -->
+
 <div class="container-fluid">
     <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <!-- Sidebar code -->
+
             <div class="sidebar-sticky">
                 <h4 class="text-center">D E N T U R A D M I N</h4>
                 <ul class="nav flex-column">
                     <li class="nav-item active">
-                        <a class="nav-link " href="../manage_admin.php">
+                        <a class="nav-link" href="../manage_admin.php">
                             <i class="fas fa-user-shield"></i> Manage Admins
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="view_dentists.php">
+                        <a class="nav-link" href="view_dentists.php">
                             <i class="fas fa-user-md"></i> Dentists
                         </a>
                     </li>
-                    
                     <li class="nav-item">
-                        <a class="nav-link " href="view_services.php">
+                        <a class="nav-link" href="view_services.php">
                             <i class="fas fa-tools"></i> Services
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="view_branches.php" >
+                        <a class="nav-link" href="view_branches.php">
                             <i class="fas fa-building"></i> Branches
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="../view_bookings.php">
+                        <a class="nav-link" href="../view_bookings.php">
                             <i class="fas fa-calendar-check"></i> View Bookings
                         </a>
                     </li>
-                    
                 </ul>
-                <!-- <div class="text-center mt-4">
-                    <a href="logout.php" class="btn btn-danger">Logout</a>
-                </div> -->
             </div>
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <h1 class="text-center mt-5 dashboard-header">Welcome to the D E N T U R A D M I N</h1>
 
-            <?php
-            if (isset($_SESSION['delete_success'])) {
-                echo "<div class='alert alert-success'>" . $_SESSION['delete_success'] . "</div>";
-                unset($_SESSION['delete_success']); // Clear the message after displaying
-            }
-
-            if (isset($_SESSION['delete_error'])) {
-                echo "<div class='alert alert-danger'>" . $_SESSION['delete_error'] . "</div>";
-                unset($_SESSION['delete_error']); // Clear the message after displaying
-            }
-            ?>
-
             <!-- Display Services Information -->
-            <div id="service-info" class="mt-5 ">
+            <div id="service-info" class="mt-5">
                 <div class="mb-3">
                     <a href="../add_service.php" class="btn btn-primary">Add New Service</a>
                 </div>
@@ -166,98 +149,38 @@ $conn->close();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $conn = new mysqli("localhost", "root", "", "dentura");
-
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
-
-                        $result = $conn->query("SELECT id, service_name, description FROM services");
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                        <td>" . htmlspecialchars($row['id']) . "</td>
-                                        <td>" . htmlspecialchars($row['service_name']) . "</td>
-                                        <td>" . htmlspecialchars($row['description']) . "</td>
-                                        <td>
-                                            <a href='../edit_service.php?service_name=" . urlencode($row['service_name']) . "' class='text-warning mr-3'>
-                                                <i class='fas fa-edit'></i>
-                                            </a>
-                                            <a href='../delete_service.php?service_name=" . urlencode($row['service_name']) . "' class='text-danger'>
-                                                <i class='fas fa-trash'></i>
-                                            </a>
-                                        </td>
-                                      </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='4' class='text-center'>No registered services found.</td></tr>";
-                        }
-
-                        $conn->close();
-                        ?>
+                        <?php if (!empty($services)): ?>
+                            <?php foreach ($services as $index => $service): ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td><?php echo htmlspecialchars($service['service_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($service['description']); ?></td>
+                                    <td>
+                                        <a href='../edit_service.php?service_name=<?php echo urlencode($service['service_name']); ?>' class='text-warning mr-3'>
+                                            <i class='fas fa-edit'></i>
+                                        </a>
+                                        <a href='../delete_service.php?service_name=<?php echo urlencode($service['service_name']); ?>' class='text-danger'>
+                                            <i class='fas fa-trash'></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan='4' class='text-center'>No registered services found.</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Display Branches Information -->
-            <div id="branch-info" class="mt-5 <?php echo ($activeSection === 'branches') ? '' : 'hidden'; ?>">
-                <div class="mb-3">
-                    <a href="add_branch.php" class="btn btn-primary">Add New Branch</a>
-                </div>
-                <table class="table mt-3">
-                    <thead>
-                        <tr>
-                            <th>Branch Id</th>
-                            <th>Branch Location</th>
-                            <th>Branch Link</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $conn = new mysqli("localhost", "root", "", "dentura");
-
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
-
-                        $result = $conn->query("SELECT id, location, link FROM branches");
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                        <td>" . htmlspecialchars($row['id']) . "</td>
-                                        <td>" . htmlspecialchars($row['location']) . "</td>
-                                        <td><a href='" . htmlspecialchars($row['link']) . "' target='_blank'>" . htmlspecialchars($row['link']) . "</a></td>
-                                        <td>
-                                            <a href='edit_branch.php?id=" . urlencode($row['id']) . "' class='text-warning mr-3'>
-                                                <i class='fas fa-edit'></i>
-                                            </a>
-                                            <a href='delete_branch.php?id=" . urlencode($row['id']) . "' class='text-danger'>
-                                                <i class='fas fa-trash'></i>
-                                            </a>
-                                        </td>
-                                      </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='4' class='text-center'>No branches available.</td></tr>";
-                        }
-
-                        $conn->close();
-                        ?>
-                    </tbody>
-                </table>
-            </div>
             
-
+        </main>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-
 
 
 <script>
