@@ -167,7 +167,6 @@ $conn->close();
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Photo</th>
                 <th>Name</th>
                 <th>Actions</th>
             </tr>
@@ -177,7 +176,6 @@ $conn->close();
                 <?php foreach ($dentists as $dentist) : ?>
                     <tr>
                         <td><?php echo htmlspecialchars($dentist['id']); ?></td>
-                        <td><img src="<?php echo htmlspecialchars($dentist['photo']); ?>" alt="Dentist Photo" style="width: 50px; height: 50px; border-radius: 50%;"></td>
                         <td><?php echo htmlspecialchars($dentist['name']); ?></td>
                         <td>
                             <button class="btn text-warning mr-3" onclick="editDentist(<?php echo $dentist['id']; ?>, '<?php echo htmlspecialchars($dentist['name']); ?>')">
@@ -268,6 +266,41 @@ $conn->close();
     </div>
 </div>
 
+<!-- Modal for Editing Dentist -->
+<div class="modal fade" id="editDentistModal" tabindex="-1" role="dialog" aria-labelledby="editDentistModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDentistModalLabel">Edit Dentist</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="../manage-dentists.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <!-- Hidden field to store dentist ID -->
+                    <input type="hidden" id="editDentistId" name="id">
+                    
+                    <!-- Dentist Name -->
+                    <div class="form-group">
+                        <label for="editDentistName">Name</label>
+                        <input type="text" class="form-control" id="editDentistName" name="name" required>
+                    </div>
+                    
+                    <!-- Dentist Photo -->
+                    <div class="form-group">
+                        <label for="editDentistPhoto">Photo</label>
+                        <input type="file" class="form-control" id="editDentistPhoto" name="photo" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="update">Update Dentist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 
