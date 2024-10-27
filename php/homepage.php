@@ -62,7 +62,7 @@ session_start();
     </div>
 
     <div>
-        <h2 class="text-center">Meet our Expert Team</h2>
+        <h2 class="text-center">Meet our Dentists</h2>
     </div>
     <br><br>
     
@@ -83,76 +83,9 @@ session_start();
 
     <?php include 'footer.php'; ?>
 
-    <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="login.php" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="login_email">Email:</label>
-                        <input type="email" class="form-control" id="login_email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login_password">Password:</label>
-                        <input type="password" class="form-control" id="login_password" name="password" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Signup Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="signup.php" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="signupModalLabel">Signup</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="signup_first_name">First Name:</label>
-                        <input type="text" class="form-control" id="signup_first_name" name="first_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup_last_name">Last Name:</label>
-                        <input type="text" class="form-control" id="signup_last_name" name="last_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup_email">Email:</label>
-                        <input type="email" class="form-control" id="signup_email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup_password">Password:</label>
-                        <input type="password" class="form-control" id="signup_password" name="password" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Signup</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+    
 
 
-    <!-- Notifications Modal -->
     
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 // Database configuration
 $servername = "localhost";
 $username = "root";
@@ -44,8 +43,7 @@ if ($result->num_rows > 0) {
 // Check for success message
 $booking_success = isset($_SESSION['booking_success']) ? $_SESSION['booking_success'] : false;
 if ($booking_success) {
-    // Clear the session variable after showing the alert
-    unset($_SESSION['booking_success']);
+    unset($_SESSION['booking_success']); // Clear the session variable after displaying the message
 }
 
 $conn->close();
@@ -82,7 +80,7 @@ $conn->close();
                 <h5 class="text-center excited-text">We're excited to assist you</h5>
                 <h2 class="text-center">Book an Appointment</h2>
 
-                <form id="bookingForm" method="POST" action="process_booking.php"> <!-- Change to your processing file -->
+                <form id="bookingForm" method="POST" action="process_booking.php">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -126,23 +124,28 @@ $conn->close();
                         </select>
                     </div>
                     <div class="form-group">
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-        </div>
-        <input type="date" class="form-control" id="date" name="date" required>
-    </div>
-</div>
-<div class="form-group">
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-clock"></i></span>
-        </div>
-        <input type="time" class="form-control" id="time" name="time" required min="07:30" max="16:00">
-    </div>
-</div>
-                    <button type="submit" id="booked"  class="btn btn-submit btn-block" style="background-color: #0085BE; color: #ffffff;">Book Now</button>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            </div>
+                            <input type="time" class="form-control" id="time" name="time" required min="07:30" max="16:00">
+                        </div>
+                    </div>
+                    <button type="submit" id="booked" class="btn btn-submit btn-block mt-3" style="background-color: #0085BE; color: #ffffff;">Book Now</button>
                 </form>
+
+                <!-- Success message displayed after a successful booking -->
+                <?php if ($booking_success): ?>
+                    <p class="text-success text-center mt-3">Booking sent! Check your notifications.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -165,11 +168,5 @@ $conn->close();
         document.getElementById('booked').innerHTML = "Booking..."; // Optionally, change button text to show action
     });
     </script>
-    <?php if ($booking_success): ?>
-        <script>
-            alert("Your booking was successful! Thank you for choosing Dentura.");
-            window.location.href = 'booking_form.php'; // Redirect to booking form after alert
-    </script>
-    <?php endif; ?>
 </body>
 </html>

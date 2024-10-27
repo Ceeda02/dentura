@@ -152,7 +152,7 @@ $conn->close();
             <!-- Display Users Information -->
             <div id="user-info" class="mt-5">
                 <div class="mb-3">
-                    <a href="signupadmin.php" class="btn btn-primary">Add New Admin</a>
+                    <a href="signupadmin.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                 </div>
                 <table class="table mt-3">
                     <thead>

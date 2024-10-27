@@ -155,23 +155,20 @@ $conn->close();
                 <a href="view_bookings.php?filter=rejected" class="btn btn-danger">Rejected</a>
             </div>
 
-            <div class="text-center mt-4">
-                <?php
-                $sortState = isset($_GET['sort']) && $_GET['sort'] === 'latest' ? 'recent' : 'latest';
-                $buttonText = $sortState === 'latest' ? 'Latest' : 'Recent';
-                ?>
-                <a href="view_bookings.php?sort=<?php echo $sortState; ?>" id="sort-button" class="btn btn-info"><?php echo $buttonText; ?></a>
-            </div>
-
             <!-- Display Bookings Information -->
             <div id="bookings-info" class="mt-5">
                 <?php
-                // Determine the filter and sort
+                // Connect to the database
+                $conn = new mysqli("localhost", "root", "", "dentura");
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Determine the filter
                 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
-                $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
                 $query = "SELECT id, name, number, email, reason, branch, date, time, COALESCE(status, 'Pending') AS status FROM bookings ";
 
-                // Apply filter and sorting
+                // Apply filter based on booking status
                 if ($filter === 'pending') {
                     $query .= "WHERE status = 'Pending' ";
                 } elseif ($filter === 'accepted') {
@@ -180,7 +177,10 @@ $conn->close();
                     $query .= "WHERE status = 'Rejected' ";
                 }
 
-                $query .= "ORDER BY date DESC";
+                // Always sort by id in descending order
+                $query .= "ORDER BY id DESC";
+
+                $result = $conn->query($query);
 
                 // Display success message if booking status has been updated
                 if (isset($_GET['message'])) {
@@ -205,59 +205,52 @@ $conn->close();
                         </tr>
                     </thead>
                     <tbody>
-    <?php
-    $conn = new mysqli("localhost", "root", "", "dentura");
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $bookingStatus = htmlspecialchars($row['status']);
+                                echo "<tr>
+                                        <td>" . htmlspecialchars($row['id']) . "</td>
+                                        <td>" . htmlspecialchars($row['name']) . "</td>
+                                        <td>" . htmlspecialchars($row['number']) . "</td>
+                                        <td>" . htmlspecialchars($row['email']) . "</td>
+                                        <td>" . htmlspecialchars($row['reason']) . "</td>
+                                        <td>" . htmlspecialchars($row['branch']) . "</td>
+                                        <td>" . htmlspecialchars($row['date']) . "</td>
+                                        <td>" . htmlspecialchars($row['time']) . "</td>
+                                        <td>" . htmlspecialchars($row['status']) . "</td>
+                                        <td>";
 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+                                // Show action buttons based on the booking status
+                                if ($bookingStatus === 'Pending') {
+                                    echo "<a href='#' class='text-success mr-3 action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='accept' title='Accept Booking'>
+                                            <i class='fas fa-check'></i>
+                                          </a>
+                                          <a href='#' class='text-danger mr-3 action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='reject' title='Reject Booking'>
+                                            <i class='fas fa-times'></i>
+                                          </a>";
+                                }
+                                // Always show the delete button
+                                echo "<a href='#' class='text-danger action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='delete' title='Delete Booking'>
+                                        <i class='fas fa-trash'></i>
+                                      </a>
+                                      </td>
+                                    </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='10' class='text-center'>No bookings available.</td></tr>";
+                        }
 
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $bookingStatus = htmlspecialchars($row['status']);
-            echo "<tr>
-                    <td>" . htmlspecialchars($row['id']) . "</td>
-                    <td>" . htmlspecialchars($row['name']) . "</td>
-                    <td>" . htmlspecialchars($row['number']) . "</td>
-                    <td>" . htmlspecialchars($row['email']) . "</td>
-                    <td>" . htmlspecialchars($row['reason']) . "</td>
-                    <td>" . htmlspecialchars($row['branch']) . "</td>
-                    <td>" . htmlspecialchars($row['date']) . "</td>
-                    <td>" . htmlspecialchars($row['time']) . "</td>
-                    <td>" . htmlspecialchars($row['status']) . "</td>
-                    <td>";
-            
-            // Show action buttons based on the booking status
-            if ($bookingStatus === 'Pending') {
-                echo "<a href='#' class='text-success mr-3 action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='accept' title='Accept Booking'>
-                        <i class='fas fa-check'></i>
-                      </a>
-                      <a href='#' class='text-danger mr-3 action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='reject' title='Reject Booking'>
-                        <i class='fas fa-times'></i>
-                      </a>";
-            }
-            // Always show the delete button
-            echo "<a href='#' class='text-danger action-button' data-id='" . htmlspecialchars($row['id']) . "' data-action='delete' title='Delete Booking'>
-                    <i class='fas fa-trash'></i>
-                  </a>
-                  </td>
-                </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='10' class='text-center'>No bookings available.</td></tr>";
-    }
-
-    $conn->close();
-    ?>
-</tbody>
-
+                        $conn->close();
+                        ?>
+                    </tbody>
                 </table>
             </div>
         </main>
     </div>
 </div>
+
+
 
 <!-- Bootstrap Modal for Confirmation -->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">

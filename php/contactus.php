@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +12,11 @@
     <link rel="icon" href="/assets/images/dlogo.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/contactus.css"> <!-- Link to external CSS file -->
+    
 </head>
 <body>
     <?php include 'navigationbar.php'; ?>
+    <?php include 'notif_modal.php'; ?>
 
     <div class="container-fluid d-flex align-items-center justify-content-center vh-100">
         <div class="row w-75">
@@ -39,6 +46,12 @@
             </div>
         </div>
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
 
     <?php include 'footer.php'; ?>
 

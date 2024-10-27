@@ -137,7 +137,7 @@ $conn->close();
             <!-- Display Services Information -->
             <div id="service-info" class="mt-5">
                 <div class="mb-3">
-                    <a href="../add_service.php" class="btn btn-primary">Add New Service</a>
+                    <a href="../add_service.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                 </div>
                 <table class="table mt-3">
                     <thead>

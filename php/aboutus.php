@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,13 +15,16 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/aboutus.css"> <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    
 </head>
 <body>
     <!-- Include the Navigation Bar -->
 
     <?php include 'navigationbar.php'; ?>
+    <?php include 'notif_modal.php'; ?>
 
     <br>
     <br>
@@ -76,7 +83,13 @@
 
    </div>
 
-    
+    <br>
+    <br>
+    <br>
+    <br><br>
+    <br>
+    <br>
+    <br>
 
 
 

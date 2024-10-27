@@ -152,7 +152,7 @@ $conn->close();
             <!-- Display Branches Information -->
             <div id="branch-info" class="mt-5 ">
                 <div class="mb-3">
-                    <a href="add_branch.php" class="btn btn-primary">Add New Branch</a>
+                    <a href="add_branch.php" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                 </div>
                 <table class="table mt-3">
                     <thead>

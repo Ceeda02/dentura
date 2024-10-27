@@ -45,8 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $update_query = "UPDATE services SET service_name='$new_service_name', description='$new_description', cost='$new_cost' WHERE id='$id'";
 
     if ($conn->query($update_query) === TRUE) {
-        // Redirect to admin_dashboard.php on success
-        header("Location: admin_dashboard.php");
+        header("Location: frontend/view_services.php");
         exit(); // Ensure no further code is executed after redirect
     } else {
         echo "Error updating service: " . $conn->error;
