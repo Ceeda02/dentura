@@ -51,16 +51,8 @@
                 <table class="table text-center text-white">
                     <tbody class="fw-normal">
                         <tr>
-                            <td>Mon - Thu:</td>
-                            <td>8am - 4pm</td>
-                        </tr>
-                        <tr>
-                            <td>Fri - Sat:</td>
-                            <td>8am - 2pm</td>
-                        </tr>
-                        <tr>
-                            <td>Sunday:</td>
-                            <td>9am - 3pm</td>
+                            <td>Monday - Sunday:</td>
+                            <td>7:30am - 4:30pm</td>
                         </tr>
                     </tbody>
                 </table>

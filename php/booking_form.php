@@ -82,7 +82,7 @@ $conn->close();
                 <h5 class="text-center excited-text">We're excited to assist you</h5>
                 <h2 class="text-center">Book an Appointment</h2>
 
-                <form method="POST" action="process_booking.php"> <!-- Change to your processing file -->
+                <form id="bookingForm" method="POST" action="process_booking.php"> <!-- Change to your processing file -->
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -141,7 +141,7 @@ $conn->close();
         <input type="time" class="form-control" id="time" name="time" required min="07:30" max="16:00">
     </div>
 </div>
-                    <button type="submit" class="btn btn-submit btn-block" style="background-color: #0085BE; color: #ffffff;">Book Now</button>
+                    <button type="submit" id="booked"  class="btn btn-submit btn-block" style="background-color: #0085BE; color: #ffffff;">Book Now</button>
                 </form>
             </div>
         </div>
@@ -150,13 +150,21 @@ $conn->close();
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
     // Set the minimum date to today for the date input
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
 
     // Optional: Set the default time to 7:30 AM
     document.getElementById('time').value = '07:30';
-</script>
+
+    // Prevent multiple submissions by listening to the form's submit event
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+        document.getElementById('booked').disabled = true; // Disable the button
+        document.getElementById('booked').innerHTML = "Booking..."; // Optionally, change button text to show action
+    });
+    </script>
     <?php if ($booking_success): ?>
         <script>
             alert("Your booking was successful! Thank you for choosing Dentura.");

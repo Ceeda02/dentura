@@ -46,14 +46,15 @@
                 <!-- Right-aligned user options -->
 <ul class="navbar-nav">
     <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-        <li class="nav-item">
-            <i class="fas fa-bell" data-toggle="modal" data-target="#notificationsModal"></i>
-        </li>
+        
         <li class="nav-item">
             <span class="nav-link">Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?></span>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="logout.php">Logout</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-bell  notification-icon" data-toggle="modal" data-target="#notificationsModal"></i>
         </li>
     <?php else: ?>
         <li class="nav-item">
